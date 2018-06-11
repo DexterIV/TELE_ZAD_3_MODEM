@@ -8,17 +8,17 @@ namespace ConsoleApplication3
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Przemyslaw Fortuna:210176 Krzysztof Barden: 210139");
-            Console.WriteLine("ATChat");
             while (true)
             {
+                Console.Clear();
+                Console.WriteLine("Przemyslaw Fortuna:210176 Krzysztof Barden:210139");
                 Console.WriteLine("Avaiable ports:");
-                foreach (var x in SerialPort.GetPortNames()) //pobranie dostępnych portów
+                foreach (var x in SerialPort.GetPortNames()) //pobranie dostępnych portow
                 {
                     Console.WriteLine(x);
                 }
                 Console.Write("Provide port: ");
-                var input = Console.ReadLine();
+                String input = Console.ReadLine();
                 Console.Write("Provide baud rate (Default 9600): ");
                 int baudrate;
                 String tmp = Console.ReadLine();
@@ -26,7 +26,7 @@ namespace ConsoleApplication3
                     baudrate = 9600;
 
 
-                foreach (var x in SerialPort.GetPortNames()) //przeszukanie czy wprowadzony port znajduje sie wsrod dostepnych portow
+                foreach (var x in SerialPort.GetPortNames()) //przeszukanie portow
                 {
                     if (x == input && baudrate > 0)
                     {
@@ -63,11 +63,12 @@ namespace ConsoleApplication3
 
             while (true) //pętla zczytujaca dane od uzytkownika
             {
-                var msg = Console.ReadLine();
-                if (msg == "quit")
+                String msg = Console.ReadLine();
+                if (msg.ToLower() == "quit")
                 {
-                    _serialPort.Close(); //zamkniecie portu
-                    System.Environment.Exit(1); // zamkniecie programu
+                    if (_serialPort.IsOpen)
+                        _serialPort.Close(); //zamkniecie portu
+                    System.Environment.Exit(0); // zamkniecie programu
                 }
                 _serialPort.WriteLine(msg); //wyslij wiadomosc do portu
             }
