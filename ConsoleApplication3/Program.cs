@@ -24,6 +24,14 @@ namespace ConsoleApplication3
                 String tmp = Console.ReadLine();
                 if (!int.TryParse(tmp, out baudrate))
                     baudrate = 9600;
+                Console.Write("Provide databits (Default 8): ");
+                int databits;
+                String tmp1 = Console.ReadLine();
+                if (!int.TryParse(tmp1, out databits) || databits < 5 || databits > 8)
+                {
+                    databits = 8;
+                    Console.WriteLine("Setting databits to 8");
+                }
 
 
                 foreach (var x in SerialPort.GetPortNames()) //przeszukanie portow
@@ -32,7 +40,7 @@ namespace ConsoleApplication3
                     {
                         Console.Clear();
                         Console.WriteLine($"Connected to {input}.");
-                        PortLoop(input, baudrate); //uruchomienie z wybranym portem
+                        PortLoop(input, baudrate, databits); //uruchomienie z wybranym portem
                     }
                 }
                 Console.WriteLine("Didnt find given port/bad baud rate value\nPress enter to try again or type 'quit' to exit program");
@@ -42,13 +50,13 @@ namespace ConsoleApplication3
            
         }
 
-        public static void PortLoop(string com, int baudrate)
+        public static void PortLoop(string com, int baudrate, int databits)
         {
             SerialPort _serialPort = new SerialPort(com, baudrate) //utworzenie portu (comport, baudrate)
             {
                 DtrEnable = true, //Data Terminal Ready
                 RtsEnable = true, //Request to send
-                DataBits = 8, //rozmiar elementu
+                DataBits = databits, //rozmiar elementu
                 Handshake = Handshake.None,
                 Parity = Parity.None,
                 StopBits = StopBits.One, //bit stopu = 1
